@@ -13,9 +13,9 @@ from time import sleep
 
 def start(bot, update):
     chatId = update.message.chat_id
-    fromUser = update.message.from_user
-    userFullName = fromUser.full_name
-    bot.sendMessage(chatId, f'Welcome {userFullName}')
+    bot.sendMessage(chatId,
+        text = startMessage,
+        parse_mode = ParseMode.MARKDOWN)
 
 
 def help(bot, update):
@@ -85,6 +85,15 @@ def main():
 
     token.start_polling()
     token.idle()
+
+
+startMessage = """سلام ✋
+
+✅ اگه برای من لینک ویدیو آپارات بفرستی میتونم بصورت فایل یا لینک دانلود مستقیم برات بفرستم.
+
+🔍 برای سرچ تو آپارات میتونی طبق دستور زیر عمل کنی :
+`@AparatgramBot آموزش پایتون`"""
+
 
 if __name__ == '__main__':
     main()
