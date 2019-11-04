@@ -39,7 +39,7 @@ def Search(searchTitle):
             resultLink = baseUrl + resultBox['href']
             searchData[resultTitle] = resultLink
         if len(searchData) != 0:
-            return searchData, searchThumb
+            return searchData, searchThumb, searchDuration
         else:
             return 'error'
     except Exception:

@@ -29,8 +29,7 @@ def help(bot, update):
 def searchInline(bot, update):
     query = update.inline_query.query
     if len(query) != 0:
-        searchData, searchThumb = Search(query)
-        print(type(query))
+        searchData, searchThumb, searchDuration = Search(query)
         if searchData != 'error':
             results = list()
             for count, item in enumerate(searchData.items()):
@@ -40,7 +39,8 @@ def searchInline(bot, update):
                     InlineQueryResultArticle(
                         id = uuid4(),
                         title = key,
-                        thumb_url=searchThumb[count],
+                        thumb_url = searchThumb[count],
+                        description = searchDuration[count],
                         input_message_content = InputTextMessageContent(value)))
         bot.answerInlineQuery(update.inline_query.id, results=results)
 
