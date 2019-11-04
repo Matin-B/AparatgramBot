@@ -26,13 +26,17 @@ def Search(searchTitle):
                 'div',
                 {'class': 'thumbnail-video thumbnail-detailside'})
         searchData = dict()
+        searchThumb = list()
         for result in results:
+            thumb = result.find('a',
+                                {'class': 'thumb thumb-preview'})
+            searchThumb.append(thumb['data-poster'])
             resultBox = result.find('a', {'class': 'title'})
             resultTitle = resultBox.text.strip()
             resultLink = baseUrl + resultBox['href']
             searchData[resultTitle] = resultLink
         if len(searchData) != 0:
-            return searchData
+            return searchData, searchThumb
         else:
             return 'error'
     except Exception:

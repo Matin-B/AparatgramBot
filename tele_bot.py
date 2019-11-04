@@ -29,15 +29,18 @@ def help(bot, update):
 def searchInline(bot, update):
     query = update.inline_query.query
     if len(query) != 0:
-        searchData = Search(query)
+        searchData, searchThumb = Search(query)
         print(type(query))
         if searchData != 'error':
             results = list()
-            for key, value in searchData.items():
+            for count, item in enumerate(searchData.items()):
+                key = item[0]
+                value = item[1]
                 results.append(
                     InlineQueryResultArticle(
                         id = uuid4(),
                         title = key,
+                        thumb_url=searchThumb[count],
                         input_message_content = InputTextMessageContent(value)))
         bot.answerInlineQuery(update.inline_query.id, results=results)
 
