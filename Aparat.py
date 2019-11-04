@@ -27,10 +27,13 @@ def Search(searchTitle):
                 {'class': 'thumbnail-video thumbnail-detailside'})
         searchData = dict()
         searchThumb = list()
+        searchDuration = list()
         for result in results:
             thumb = result.find('a',
                                 {'class': 'thumb thumb-preview'})
             searchThumb.append(thumb['data-poster'])
+            duration = result.find('span', {'class': 'duration'}).text
+            searchDuration.append(duration)
             resultBox = result.find('a', {'class': 'title'})
             resultTitle = resultBox.text.strip()
             resultLink = baseUrl + resultBox['href']
