@@ -34,7 +34,11 @@ def searchInline(bot, update):
         if searchData != 'error':
             results = list()
             for key, value in searchData.items():
-                results.append(InlineQueryResultArticle(id = uuid4(), title = key, input_message_content = InputTextMessageContent(value)))
+                results.append(
+                    InlineQueryResultArticle(
+                        id = uuid4(),
+                        title = key,
+                        input_message_content = InputTextMessageContent(value)))
         bot.answerInlineQuery(update.inline_query.id, results=results)
 
 
@@ -64,7 +68,7 @@ def dl(bot, update):
 
 
 def main():
-    token = Updater('TOKEN')
+    token = Updater('854700824:AAHhVDnL97JmJZzGKRwAtfJyL4QDIPIYe_8')
 
     dp = token.dispatcher
 
