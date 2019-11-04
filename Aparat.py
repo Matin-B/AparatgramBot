@@ -18,7 +18,7 @@ def title(url):
 
 def Search(searchTitle):
     try:
-        baseUrl = 'https://www.aparat.com'
+        baseUrl = 'https://www.aparat.com/v/'
         url = f'https://www.aparat.com/search/{searchTitle}'
         r = requests.get(url)
         soup = BeautifulSoup(r.text, 'html.parser')
@@ -36,7 +36,7 @@ def Search(searchTitle):
             searchDuration.append(duration)
             resultBox = result.find('a', {'class': 'title'})
             resultTitle = resultBox.text.strip()
-            resultLink = baseUrl + resultBox['href']
+            resultLink = baseUrl + resultBox['href'].split('/')[-2]
             searchData[resultTitle] = resultLink
         if len(searchData) != 0:
             return searchData, searchThumb, searchDuration
