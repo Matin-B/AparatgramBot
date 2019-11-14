@@ -1,3 +1,5 @@
 # VSCode Config
 .vscode
-__pycache__/Aparat.cpython-37.pyc
+
+# Python Cache Directory
+__pycache__
