@@ -7,23 +7,25 @@ from telegram import InlineKeyboardButton, \
     InputTextMessageContent, \
     InlineQueryResultArticle
 from Aparat import Search, Downloader
+from config import BOT_TOKEN
 from uuid import uuid4
-from time import sleep
 
 
 def start(bot, update):
     chatId = update.message.chat_id
-    bot.sendMessage(chatId,
-        text = startMessage,
-        parse_mode = ParseMode.MARKDOWN)
+    bot.sendMessage(
+        chatId,
+        text=startMessage,
+        parse_mode=ParseMode.MARKDOWN)
 
 
 def help(bot, update):
     chatId = update.message.chat_id
     messageId = update.message.message_id
-    bot.sendMessage(chatId,
+    bot.sendMessage(
+        chatId,
         'This is help text',
-        reply_to_message_id = messageId)
+        reply_to_message_id=messageId)
 
 
 def searchInline(bot, update):
@@ -37,11 +39,11 @@ def searchInline(bot, update):
                 value = item[1]
                 results.append(
                     InlineQueryResultArticle(
-                        id = uuid4(),
-                        title = key,
-                        thumb_url = searchThumb[count],
-                        description = searchDuration[count],
-                        input_message_content = InputTextMessageContent(value)))
+                        id=uuid4(),
+                        title=key,
+                        thumb_url=searchThumb[count],
+                        description=searchDuration[count],
+                        input_message_content=InputTextMessageContent(value)))
         bot.answerInlineQuery(update.inline_query.id, results=results)
 
 
@@ -56,35 +58,37 @@ def dl(bot, update):
             keyboard = list()
             for key, value in dlData.items():
                 keyboard.append([InlineKeyboardButton(f'کیفیت {key}', value)])
-            bot.sendMessage(chatId,
-                text = f'Name: `{vidTitle}`\n\n\nDownload Links:',
-                reply_markup = InlineKeyboardMarkup(keyboard),
-                parse_mode = ParseMode.MARKDOWN)
+            bot.sendMessage(
+                chatId,
+                text=f'Name: `{vidTitle}`\n\n\nDownload Links:',
+                reply_markup=InlineKeyboardMarkup(keyboard),
+                parse_mode=ParseMode.MARKDOWN)
         else:
-            bot.sendMessage(chatId,
+            bot.sendMessage(
+                chatId,
                 'Your Link is Wrong, Please Check it !!',
-                reply_to_message_id = messageId)
+                reply_to_message_id=messageId)
     else:
-        bot.sendMessage(chatId,
+        bot.sendMessage(
+            chatId,
             'Link is wrong !!!',
-            reply_to_message_id = messageId)
+            reply_to_message_id=messageId)
 
 
-def main():
-    token = Updater('854700824:AAHhVDnL97JmJZzGKRwAtfJyL4QDIPIYe_8')
+token = Updater(BOT_TOKEN)
 
-    dp = token.dispatcher
+dp = token.dispatcher
 
-    dp.add_handler(CommandHandler('start', start))
-    dp.add_handler(CommandHandler('help', help))
+dp.add_handler(CommandHandler('start', start))
+dp.add_handler(CommandHandler('help', help))
 
-    dp.add_handler(InlineQueryHandler(searchInline))
+dp.add_handler(InlineQueryHandler(searchInline))
 
-    dp.add_handler(MessageHandler(Filters.text, dl))
+dp.add_handler(MessageHandler(Filters.text, dl))
 
 
-    token.start_polling()
-    token.idle()
+token.start_polling()
+token.idle()
 
 
 startMessage = """سلام ✋
@@ -94,7 +98,3 @@ startMessage = """سلام ✋
 
 🔍 برای سرچ تو آپارات میتونی طبق دستور زیر عمل کنی :
 `@AparatgramBot آموزش پایتون`"""
-
-
-if __name__ == '__main__':
-    main()
