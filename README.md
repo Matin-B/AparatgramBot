@@ -11,4 +11,4 @@ Download video from Aparat.com
   - [ ] Add admin panel for telegram bot
   - [ ] Create Web Admin panel
 
-- [ ] Detect and download playlists
+- [X] Detect and extract video links from playlist page
