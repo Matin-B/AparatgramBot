@@ -6,22 +6,24 @@
 
 import requests
 import re
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as bs4
 
 
 def title(url):
-    r = requests.get(url)
-    soup = BeautifulSoup(r.text, 'html.parser')
-    vidTitle = soup.find(id='videoTitle').text.strip()
-    return vidTitle
-
-
-def Search(searchTitle):
     try:
-        baseUrl = 'https://www.aparat.com/v/'
+        r = requests.get(url)
+        soup = bs4(r.text, 'html.parser')
+        vidTitle = soup.find(id='videoTitle').text.strip()
+        return vidTitle
+    except Exception as e:
+        return f'Error, {e}'
+
+
+def search(searchTitle):
+    try:
         url = f'https://www.aparat.com/search/{searchTitle}'
         r = requests.get(url)
-        soup = BeautifulSoup(r.text, 'html.parser')
+        soup = bs4(r.text, 'html.parser')
         results = soup.find_all(
                 'div',
                 {'class': 'thumbnail-video thumbnail-detailside'})
@@ -36,30 +38,48 @@ def Search(searchTitle):
             searchDuration.append(duration)
             resultBox = result.find('a', {'class': 'title'})
             resultTitle = resultBox.text.strip()
-            resultLink = baseUrl + resultBox['href'].split('/')[-2]
+            resultLink = baseUrl + '/v/' + resultBox['href'].split('/')[-2]
             searchData[resultTitle] = resultLink
         if len(searchData) != 0:
             return searchData, searchThumb, searchDuration
         else:
             return 'error'
-    except Exception:
-        return 'error'
+    except Exception as e:
+        return f'Error, {e}'
 
 
-def Downloader(url):
+def playlist(url):
     try:
-        r = requests.get(url)
-        soup = BeautifulSoup(r.text, 'html.parser')
-        vidTitle = soup.find(id='videoTitle').text.strip()
-        dl_Menu = soup.select('.dropdown, .download-dropdown')[0]
-        Links = dl_Menu.find_all('a')
+        if '/playlist/' in url:
+            response = requests.get(url)
+            soup = bs4(response.text, 'html.parser')
+            playlist_title = soup.find('div', {'class': 'playlist-title'})
+            playlist_title = playlist_title.text.strip()
+            videos = soup.find_all('a', {'class': 'light-80 dark-10'})
+            videos_list = list()
+            for item in videos:
+                videos_list.append(baseUrl + item['href'])
+            return (playlist_title, videos_list)
+        else:
+            return 'It\'s not playlist !!'
+    except Exception as e:
+        return f'Error, {e}'
 
-        dlData = dict()
-        for link in Links:
-            quality = re.findall('[0-9]+', link.get_text().strip())[0] + 'p'
-            dlUrl = link['href']
-            dlData[quality] = dlUrl
 
+def download(url):
+    try:
+        response = requests.get(url)
+        soup = bs4(response.text, 'html.parser')
+        video_title = soup.find(id='videoTitle').text.strip()
+        download_menu = soup.select('.dropdown, .download-dropdown')[0]
+        links = download_menu.find_all('a')
+        download_links = list()
+        for link in links:
+            download_link = link['href']
+            download_links.append(download_link)
         return vidTitle, dlData
-    except Exception:
-        return 'error'
+    except Exception as e:
+        return f'Error, {e}'
+
+
+baseUrl = 'https://www.aparat.com'
