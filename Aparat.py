@@ -50,18 +50,23 @@ def search(searchTitle):
 
 def playlist(url):
     try:
-        if '/playlist/' in url:
-            response = requests.get(url)
-            soup = bs4(response.text, 'html.parser')
-            playlist_title = soup.find('div', {'class': 'playlist-title'})
-            playlist_title = playlist_title.text.strip()
-            videos = soup.find_all('a', {'class': 'light-80 dark-10'})
-            videos_list = list()
-            for item in videos:
-                videos_list.append(baseUrl + item['href'])
-            return (playlist_title, videos_list)
-        else:
-            return 'It\'s not playlist !!'
+        response = requests.get(url)
+        soup = bs4(response.text, 'html.parser')
+        playlist_title = soup.find('div', {'class': 'playlist-title'})
+        playlist_title = playlist_title.text.strip()
+        channel_name = soup.select_one('.details').find('a').text.strip()
+        channel_link = soup.select_one('.details').find('a')['href']
+        videos = soup.find_all('a', {'class': 'light-80 dark-10'})
+        videos_list = list()
+        for item in videos:
+            link = baseUrl + item['href'].split('?')[0]
+            videos_list.append(link)
+        return {
+                'title': playlist_title,
+                'links': videos_list,
+                'channel-name': channel_name,
+                'channel-link': channel_link
+                }
     except Exception as e:
         return f'Error, {e}'
 
@@ -71,13 +76,28 @@ def download(url):
         response = requests.get(url)
         soup = bs4(response.text, 'html.parser')
         video_title = soup.find(id='videoTitle').text.strip()
+        video_image = soup.find("meta",  property="og:image")['content']
+        video_date_created = soup.find(
+                "meta", {'name': 'DC.Date.Created'})['content']
+        video_count = soup.select_one('.view-count').text.strip()
+        video_count = video_count.replace(' بازدید', '')
+        video_likes = soup.select_one('#likeVideoButton').text.strip()
+        video_description = soup.select_one('.paragraph').text.strip()
         download_menu = soup.select('.dropdown, .download-dropdown')[0]
         links = download_menu.find_all('a')
         download_links = list()
         for link in links:
             download_link = link['href']
             download_links.append(download_link)
-        return vidTitle, dlData
+        return {
+                'title': video_title,
+                'image': video_image,
+                'links': download_links,
+                'count': video_count,
+                'likes': video_likes,
+                'date': video_date_created,
+                'description': video_description
+                }
     except Exception as e:
         return f'Error, {e}'
 
