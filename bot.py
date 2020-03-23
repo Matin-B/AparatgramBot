@@ -127,7 +127,8 @@ def text(bot, update):
                 f'👍 لایک: {likes}\n'
                 f'📅 زمان آپلود: {date}\n'
                 f'📜 توضیحات: \n{description}\n',
-                reply_to_message_id=message_id
+                reply_to_message_id=message_id,
+                reply_markup=InlineKeyboardMarkup(generate_keyboard(links))
             )
     else:
         bot.sendMessage(
