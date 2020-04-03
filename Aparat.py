@@ -57,12 +57,14 @@ def playlist(url):
         channel_name = soup.select_one('.details').find('a').text.strip()
         channel_link = soup.select_one('.details').find('a')['href']
         videos = soup.find_all('a', {'class': 'light-80 dark-10'})
+        videos_count = len(videos)
         videos_list = list()
         for item in videos:
             link = baseUrl + item['href'].split('?')[0]
             videos_list.append(link)
         return {
                 'title': playlist_title,
+                'count': videos_count,
                 'links': videos_list,
                 'channel-name': channel_name,
                 'channel-link': channel_link
@@ -82,7 +84,10 @@ def download(url):
         video_count = soup.select_one('.view-count').text.strip()
         video_count = video_count.replace(' بازدید', '')
         video_likes = soup.select_one('#likeVideoButton').text.strip()
-        video_description = soup.select_one('.paragraph').text.strip()
+        if soup.select_one('.paragraph'):
+            video_description = soup.select_one('.paragraph').text.strip()
+        else:
+            video_description = None
         download_menu = soup.select('.dropdown, .download-dropdown')[0]
         links = download_menu.find_all('a')
         download_links = list()
