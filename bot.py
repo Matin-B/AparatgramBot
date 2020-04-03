@@ -70,6 +70,12 @@ def text(bot, update):
                 f'⚠️ Error\n\nLink: {user_text}\nError: `{playlist_detail}`',
                 parse_mode=ParseMode.MARKDOWN
             )
+            bot.sendMessage(
+                chat_id,
+                'مشکلی در پردازش لینک رخ داد.\n'
+                'لینک مورد نظر جهت بررسی برای پشتیبانی ارسال شد',
+                reply_to_message_id=message_id
+            )
         else:
             title = playlist_detail['title']
             links = playlist_detail['links']
@@ -78,8 +84,7 @@ def text(bot, update):
             bot.sendMessage(
                 chat_id,
                 f'🖊 عنوان لیست پخش: {title}\n\n\n'
-                'ℹ️ کانال: جادی تی وی',
-                # f'ℹ️ کانال: [{channel_name}]({channel_link})',
+                f'ℹ️ کانال: {channel_name}',
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=message_id
             )
@@ -110,6 +115,12 @@ def text(bot, update):
                 ADMIN,
                 f'⚠️ Error\n\nLink: {user_text}\nError: `{video_detail}`',
                 parse_mode=ParseMode.MARKDOWN
+            )
+            bot.sendMessage(
+                chat_id,
+                'مشکلی در پردازش لینک رخ داد.\n'
+                'لینک مورد نظر جهت بررسی برای پشتیبانی ارسال شد',
+                reply_to_message_id=message_id
             )
         else:
             title = video_detail['title']
