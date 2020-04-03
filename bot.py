@@ -161,4 +161,3 @@ dp.add_handler(MessageHandler(Filters.text, text))
 
 
 token.start_polling()
-token.idle()
