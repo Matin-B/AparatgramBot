@@ -8,6 +8,7 @@ from telegram import InlineKeyboardButton, \
     InlineQueryResultArticle
 from Aparat import search, download, playlist
 from config import BOT_TOKEN, ADMIN
+from time import sleep
 from uuid import uuid4
 
 
@@ -79,12 +80,14 @@ def text(bot, update):
         else:
             title = playlist_detail['title']
             links = playlist_detail['links']
+            count = playlist_detail['count']
             channel_name = playlist_detail['channel-name']
             channel_link = playlist_detail['channel-link']
             bot.sendMessage(
                 chat_id,
                 f'🖊 عنوان لیست پخش: {title}\n\n\n'
-                f'ℹ️ کانال: {channel_name}',
+                f'ℹ️ کانال: {channel_name}\n'
+                f'🔄 تعداد ویدیو: {count}',
                 parse_mode=ParseMode.MARKDOWN,
                 reply_to_message_id=message_id
             )
@@ -108,6 +111,7 @@ def text(bot, update):
                     reply_to_message_id=message_id + 1,
                     reply_markup=InlineKeyboardMarkup(generate_keyboard(links))
                 )
+                sleep(0.5)
     elif 'aparat.com' in user_text:
         video_detail = download(user_text)
         if 'Error' in video_detail:
