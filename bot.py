@@ -35,7 +35,7 @@ def help_command(bot, update):
 def searchInline(bot, update):
     query = update.inline_query.query
     if len(query) != 0:
-        searchData, searchThumb, searchDuration = Search(query)
+        searchData, searchThumb, searchDuration = search(query)
         if searchData != 'error':
             results = list()
             for count, item in enumerate(searchData.items()):
