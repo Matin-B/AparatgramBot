@@ -39,7 +39,7 @@ def searchInline(update, contex):
     if len(query) != 0:
         searchData, searchThumb, searchDuration = search(query)
         if searchData != 'error':
-            results = list()
+            results = []
             for count, item in enumerate(searchData.items()):
                 key = item[0]
                 value = item[1]
@@ -54,7 +54,7 @@ def searchInline(update, contex):
 
 
 def generate_keyboard(links):
-    keyboard = list()
+    keyboard = []
     for link in links:
         quality = link.split('-')[-1].split('__')[0]
         keyboard.append([InlineKeyboardButton(quality, url=link)])

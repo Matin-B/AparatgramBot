@@ -13,8 +13,7 @@ def title(url):
     try:
         r = requests.get(url)
         soup = bs4(r.text, 'html.parser')
-        vidTitle = soup.find(id='videoTitle').text.strip()
-        return vidTitle
+        return soup.find(id='videoTitle').text.strip()
     except Exception as e:
         return f'Error, {e}'
 
@@ -27,9 +26,9 @@ def search(searchTitle):
         results = soup.find_all(
                 'div',
                 {'class': 'thumbnail-video thumbnail-detailside'})
-        searchData = dict()
-        searchThumb = list()
-        searchDuration = list()
+        searchData = {}
+        searchThumb = []
+        searchDuration = []
         for result in results:
             thumb = result.find('a',
                                 {'class': 'thumb thumb-preview'})
@@ -58,7 +57,7 @@ def playlist(url):
         channel_link = soup.select_one('.details').find('a')['href']
         videos = soup.find_all('a', {'class': 'light-80 dark-10'})
         videos_count = len(videos)
-        videos_list = list()
+        videos_list = []
         for item in videos:
             link = baseUrl + item['href'].split('?')[0]
             videos_list.append(link)
@@ -90,10 +89,7 @@ def download(url):
             video_description = None
         download_menu = soup.select('.dropdown, .download-dropdown')[0]
         links = download_menu.find_all('a')
-        download_links = list()
-        for link in links:
-            download_link = link['href']
-            download_links.append(download_link)
+        download_links = [link['href'] for link in links]
         return {
                 'title': video_title,
                 'image': video_image,
