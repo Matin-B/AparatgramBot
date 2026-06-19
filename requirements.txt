@@ -13,6 +13,6 @@ python-telegram-bot==12.4.2
 requests==2.33.0
 six==1.14.0
 soupsieve==2.0
-tornado==6.5.6
+tornado==6.5.7
 urllib3==2.7.0
 uuid==1.30
